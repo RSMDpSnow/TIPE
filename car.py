@@ -26,12 +26,15 @@ class Camera:
         pg.draw.aaline(window, (0,0,0), *self.projete(seg))
     
     def draw_car(self, car, window):
+        theta = ml.atan(car.scale[1]/car.scale[0])
         u = ml.vec2(np.linalg.norm(car.scale)/2, 0)
-        theta = ml.atan(self.scale[1]/self.scale[0])
-        p1 = car.pos + ml.rotate(u, car.angle - theta)
-        p2 = car.pos + ml.rotate(u, car.angle + theta)
-        p3 = 2*car.pos - p1
-        p4 = 2*car.pos - p2
+        ug = ml.rotate(u, car.angle - theta)
+        ud = ml.rotate(u, car.angle + theta)
+        
+        p1 = car.pos + ug
+        p2 = car.pos + ud
+        p3 = car.pos - ug
+        p4 = car.pos - ud
     
         pg.draw.lines(window, (255,0,0), True, self.projete([p1,p2,p3,p4]))
         
@@ -52,7 +55,7 @@ class Car:
         self.pos = pos
         self.scale = scale
         self.angle = 0
-        self.v = 1
+        self.v = 0
         self.identity = Car.get_identity()
         self.score = 0
         self.passed_checkpoints = 0
@@ -73,10 +76,10 @@ class Seg:
     def __init__(self, a, b):
         self.a = a
         self.b = b
+    
     @property
     def vec(self):
         return np.array([self.a, self.b])
-    
 
     @staticmethod
     def plan_seq(s1, s2):

@@ -57,7 +57,8 @@ def rotate(v2, angle):
     return M @ v2
 
 def vec(X) : return X.reshape(-1, 1)
-def vec2(x=0,y=0): return np.float32([x,y])
+def vec2(x=0,y=0): 
+    return np.float32([x,y])
 
 def croix(X, Y):
     """return cartesiean product of two list/sets/tuple"""
